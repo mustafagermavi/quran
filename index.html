@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Quran Kareem · mobile</title>
+  <!-- Font Awesome icons (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: elegant Arabic + Latin -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', 'Amiri', serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #020617;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* main app container – mobile size */
+    #app {
+      width: 100%;
+      max-width: 400px;
+      height: 700px;
+      background: linear-gradient(145deg, #020617 0%, #0f172a 100%);
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
+    /* screens container */
+    .screens-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px 80px 16px; /* bottom space for fixed nav */
+      scroll-behavior: smooth;
+    }
+
+    /* each screen */
+    .screen {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0.5; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* bottom fixed navigation */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #0a0f1f;
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #d4af3722;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 0 0 32px 32px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #a0aec0;
+      font-size: 12px;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 40px;
+      transition: all 0.15s;
+      width: 70px;
+      cursor: pointer;
+    }
+
+    .nav-item i {
+      font-size: 20px;
+      color: #d4af37aa;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(145deg, #d4af3722, #b4945022);
+      color: #d4af37;
+      border: 1px solid #d4af3740;
+    }
+
+    .nav-item.active i {
+      color: #d4af37;
+    }
+
+    /* common headings */
+    h1, h2, h3 {
+      font-weight: 600;
+    }
+
+    .gold-text {
+      color: #d4af37;
+    }
+
+    /* header style */
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .screen-header h2 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #d4af37;
+      text-shadow: 0 2px 8px #d4af3720;
+    }
+
+    .back-btn {
+      background: linear-gradient(145deg, #d4af37, #b58c2d);
+      border: none;
+      color: #020617;
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px #d4af3740;
+      cursor: pointer;
+    }
+
+    /* search box */
+    .search-box {
+      background: #111827;
+      border-radius: 40px;
+      padding: 12px 20px;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #d4af3722;
+    }
+
+    .search-box i {
+      color: #d4af37;
+      font-size: 16px;
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      width: 100%;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: #6b7280;
+    }
+
+    /* surah grid 2x2 */
+    .surah-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .surah-card {
+      background: #0f172a;
+      border: 1.5px solid #d4af37;
+      border-radius: 28px;
+      padding: 16px 8px;
+      text-align: center;
+      transition: all 0.2s;
+      box-shadow: 0 8px 0 #0b1424;
+      cursor: pointer;
+    }
+
+    .surah-card:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 0 #0b1424;
+    }
+
+    .surah-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #d4af37;
+      margin-bottom: 4px;
+    }
+
+    .surah-card .arabic-name {
+      font-family: 'Amiri', serif;
+      font-size: 20px;
+      color: white;
+      direction: rtl;
+      line-height: 1.4;
+    }
+
+    /* ayah screen */
+    .surah-title {
+      font-size: 32px;
+      color: #d4af37;
+      margin: 8px 0 4px;
+      text-align: center;
+    }
+
+    .audio-player {
+      background: #111827;
+      border-radius: 40px;
+      padding: 10px 16px;
+      margin: 16px 0;
+      border: 1px solid #d4af37;
+    }
+
+    audio {
+      width: 100%;
+      outline: none;
+      border-radius: 20px;
+    }
+
+    .qari-select {
+      background: #1e293b;
+      color: white;
+      border: 1px solid #d4af37;
+      border-radius: 30px;
+      padding: 8px 16px;
+      margin: 8px 0 16px;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .ayah-container {
+      background: #0f172a80;
+      border-radius: 32px;
+      padding: 20px 16px;
+      margin-top: 12px;
+    }
+
+    .ayah-text {
+      font-family: 'Amiri', serif;
+      font-size: 26px;
+      line-height: 2.2;
+      color: white;
+      direction: rtl;
+      text-align: right;
+      margin-bottom: 16px;
+      border-bottom: 1px dashed #d4af3750;
+      padding-bottom: 16px;
+      position: relative;
+    }
+
+    .bookmark-btn {
+      background: transparent;
+      border: 1px solid #d4af37;
+      color: #d4af37;
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .bookmark-btn i {
+      font-size: 14px;
+    }
+
+    .bookmark-btn.active {
+      background: #d4af37;
+      color: #020617;
+    }
+
+    /* tasbeeh screen */
+    .tasbeeh-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+    }
+
+    .counter-display {
+      font-size: 120px;
+      font-weight: 700;
+      color: #d4af37;
+      text-shadow: 0 0 20px #d4af37;
+      line-height: 1;
+      margin-bottom: 40px;
+    }
+
+    .tap-btn {
+      background: linear-gradient(145deg, #d4af37, #b38e2c);
+      border: none;
+      width: 220px;
+      height: 220px;
+      border-radius: 220px;
+      color: #020617;
+      font-size: 28px;
+      font-weight: 600;
+      box-shadow: 0 20px 30px #d4af3740, 0 6px 0 #7a621f;
+      transition: all 0.08s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tap-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 10px 20px #d4af3740, 0 2px 0 #7a621f;
+    }
+
+    .tap-btn i {
+      font-size: 36px;
+    }
+
+    /* prayer times */
+    .prayer-list {
+      background: #0f172a60;
+      border-radius: 40px;
+      padding: 20px;
+      margin-top: 30px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #d4af3722;
+    }
+
+    .prayer-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 22px;
+      padding: 16px 8px;
+      border-bottom: 1px solid #d4af3722;
+      color: #d4af37;
+      font-weight: 500;
+    }
+
+    .prayer-item span:last-child {
+      color: white;
+      font-family: monospace;
+      font-size: 20px;
+    }
+
+    .prayer-item:last-child {
+      border-bottom: none;
+    }
+
+    /* qibla compass */
+    .compass-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    canvas {
+      width: 280px;
+      height: 280px;
+      display: block;
+      margin: 0 auto;
+      border-radius: 280px;
+      border: 3px solid #d4af37;
+      background: #020617;
+      box-shadow: 0 0 30px #d4af3720;
+    }
+
+    .compass-info {
+      color: #d4af37;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    /* bookmarks section on home */
+    .bookmark-section {
+      background: #11182760;
+      border-radius: 28px;
+      padding: 16px;
+      margin: 20px 0 8px;
+      border: 1px dashed #d4af37;
+    }
+
+    .bookmark-section h4 {
+      color: #d4af37;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .bookmark-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .bookmark-chip {
+      background: #1e293b;
+      border: 1px solid #d4af37;
+      border-radius: 40px;
+      padding: 8px 16px;
+      color: white;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .bookmark-chip i {
+      color: #d4af37;
+      font-size: 12px;
+    }
+
+    /* utility */
+    .note {
+      color: #94a3b8;
+      font-size: 14px;
+      text-align: center;
+      margin: 16px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- screens container -->
+  <div class="screens-container" id="screensContainer">
+    <!-- HOME screen (surah list) -->
+    <div class="screen active" id="homeScreen">
+      <div class="screen-header">
+        <h2>☪ Quran Kareem</h2>
+        <div style="width:40px"></div> <!-- spacer -->
+      </div>
+      <!-- search -->
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search surah...">
+      </div>
+      <!-- bookmarks bar -->
+      <div id="bookmarkHomeSection" class="bookmark-section" style="display: none;">
+        <h4><i class="fas fa-bookmark gold-text"></i> Favorites</h4>
+        <div class="bookmark-items" id="bookmarkChips"></div>
+      </div>
+      <!-- surah grid -->
+      <div id="surahGrid" class="surah-grid"></div>
+      <div class="note">⬇️ tap any surah</div>
+    </div>
+
+    <!-- SURAH DETAIL screen (ayah) -->
+    <div class="screen" id="surahScreen">
+      <div class="screen-header">
+        <button class="back-btn" id="backFromSurah"><i class="fas fa-arrow-right"></i></button>
+        <h2 id="surahEnglishName" class="gold-text" style="font-size:22px">Al-Fatiha</h2>
+      </div>
+      <!-- audio player with qari select -->
+      <div class="audio-player">
+        <audio id="audioPlayer" controls>
+          <source src="" type="audio/mpeg">
+        </audio>
+        <select id="qariSelect" class="qari-select">
+          <option value="beep1">Qari • Abdul Basit (demo)</option>
+          <option value="beep2">Qari • Al-Hudhayfi (demo)</option>
+          <option value="beep3">Qari • Al-Minshawi (demo)</option>
+        </select>
+      </div>
+      <!-- ayah container -->
+      <div id="ayahsContainer" class="ayah-container"></div>
+    </div>
+
+    <!-- TASBEEH screen -->
+    <div class="screen" id="tasbeehScreen">
+      <div class="screen-header">
+        <h2>📿 Tasbeeh</h2>
+        <div style="width:40px"></div>
+      </div>
+      <div class="tasbeeh-container">
+        <div class="counter-display" id="tasbeehCount">0</div>
+        <button class="tap-btn" id="tapTasbeehBtn">
+          <i class="fas fa-hand-paper"></i> TAP
+        </button>
+        <button class="bookmark-btn" id="resetTasbeeh" style="margin-top:30px;"><i class="fas fa-undo-alt"></i> Reset</button>
+      </div>
+    </div>
+
+    <!-- PRAYER TIMES screen -->
+    <div class="screen" id="prayerScreen">
+      <div class="screen-header">
+        <h2>🕋 Prayer</h2>
+        <div style="width:40px"></div>
+      </div>
+      <div class="prayer-list" id="prayerTimesList">
+        <!-- dynamic from js -->
+      </div>
+      <div class="note">* Demo times (fixed for Mecca)</div>
+    </div>
+
+    <!-- QIBLA screen -->
+    <div class="screen" id="qiblaScreen">
+      <div class="screen-header">
+        <h2>🧭 Qibla</h2>
+        <div style="width:40px"></div>
+      </div>
+      <div class="compass-container">
+        <canvas id="compassCanvas" width="280" height="280"></canvas>
+        <div class="compass-info" id="compassDirection">pointing to Mecca</div>
+        <button class="bookmark-btn" id="calibrateCompass" style="margin-top:20px;"><i class="fas fa-sync-alt"></i> calibrate (mock)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- bottom navigation -->
+  <div class="bottom-nav">
+    <button class="nav-item active" data-screen="home"><i class="fas fa-quran"></i><span>Quran</span></button>
+    <button class="nav-item" data-screen="tasbeeh"><i class="fas fa-hands"></i><span>Tasbeeh</span></button>
+    <button class="nav-item" data-screen="prayer"><i class="fas fa-clock"></i><span>Prayer</span></button>
+    <button class="nav-item" data-screen="qibla"><i class="fas fa-location-arrow"></i><span>Qibla</span></button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- dummy Quran data (offline text) ----------
+    const surahs = [
+      { id:1, englishName:"Al-Fatiha", arabicName:"الفاتحة", ayahs:["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", "الرَّحْمَٰنِ الرَّحِيمِ", "مَالِكِ يَوْمِ الدِّينِ", "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ"] },
+      { id:2, englishName:"Al-Baqarah", arabicName:"البقرة", ayahs:["الم", "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ", "الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ"] },
+      { id:3, englishName:"Aal-E-Imran", arabicName:"آل عمران", ayahs:["الم", "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ", "نَزَّلَ عَلَيْكَ الْكِتَابَ بِالْحَقِّ"] },
+      { id:4, englishName:"An-Nisa", arabicName:"النساء", ayahs:["يَا أَيُّهَا النَّاسُ اتَّقُوا رَبَّكُمُ", "وَآتُوا الْيَتَامَىٰ أَمْوَالَهُمْ"] }
+    ];
+
+    // ---------- bookmarks from localStorage ----------
+    let bookmarks = JSON.parse(localStorage.getItem('quranBookmarks')) || []; // each { surahId, ayahIndex }
+
+    // ---------- global state ----------
+    let currentScreen = 'home';
+    let selectedSurah = null;
+    let tasbeehCounter = 0;
+
+    // ---------- DOM elements ----------
+    const screens = document.querySelectorAll('.screen');
+    const navItems = document.querySelectorAll('.nav-item');
+    const homeScreen = document.getElementById('homeScreen');
+    const surahScreen = document.getElementById('surahScreen');
+    const surahGrid = document.getElementById('surahGrid');
+    const searchInput = document.getElementById('searchInput');
+    const backFromSurah = document.getElementById('backFromSurah');
+    const surahEnglishName = document.getElementById('surahEnglishName');
+    const ayahsContainer = document.getElementById('ayahsContainer');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const qariSelect = document.getElementById('qariSelect');
+    const bookmarkSection = document.getElementById('bookmarkHomeSection');
+    const bookmarkChips = document.getElementById('bookmarkChips');
+    const tasbeehCount = document.getElementById('tasbeehCount');
+    const tapBtn = document.getElementById('tapTasbeehBtn');
+    const resetTasbeeh = document.getElementById('resetTasbeeh');
+    const prayerTimesList = document.getElementById('prayerTimesList');
+    const compassCanvas = document.getElementById('compassCanvas');
+    const compassDirection = document.getElementById('compassDirection');
+
+    // ---------- helper: switch screen ----------
+    function showScreen(screenId) {
+      screens.forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId + 'Screen').classList.add('active');
+      navItems.forEach(item => {
+        const data = item.getAttribute('data-screen');
+        if (data === screenId) item.classList.add('active');
+        else item.classList.remove('active');
+      });
+      currentScreen = screenId;
+      if (screenId === 'home') renderSurahList();
+      if (screenId === 'qibla') drawCompass(45); // default angle
+      if (screenId === 'prayer') renderPrayerTimes();
+    }
+
+    // ---------- render surah grid (with filter) ----------
+    function renderSurahList(filter = '') {
+      const filtered = surahs.filter(s => s.englishName.toLowerCase().includes(filter.toLowerCase()) || s.arabicName.includes(filter));
+      surahGrid.innerHTML = filtered.map(s => `
+        <div class="surah-card" data-id="${s.id}">
+          <h3>${s.id}. ${s.englishName}</h3>
+          <div class="arabic-name">${s.arabicName}</div>
+        </div>
+      `).join('');
+      // attach event
+      document.querySelectorAll('.surah-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          const id = parseInt(card.dataset.id);
+          openSurah(id);
+        });
+      });
+    }
+
+    // open surah detail
+    function openSurah(id) {
+      selectedSurah = surahs.find(s => s.id === id);
+      if (!selectedSurah) return;
+      surahEnglishName.innerText = selectedSurah.englishName;
+      // render ayahs with bookmark status
+      renderAyahs(selectedSurah);
+      // set audio source: we use a placeholder beep via web audio api (offline demo)
+      // for simplicity, we attach a fake source but will override with web audio on play.
+      // The audio element will be used as a trigger to play our custom beep.
+      setupAudioBeep();
+      showScreen('surah');
+    }
+
+    function renderAyahs(surah) {
+      let html = '';
+      surah.ayahs.forEach((ayah, idx) => {
+        const isBookmarked = bookmarks.some(b => b.surahId === surah.id && b.ayahIndex === idx);
+        html += `
+          <div class="ayah-text" data-ayah="${idx}">
+            ${ayah}
+            <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" data-surah="${surah.id}" data-ayah="${idx}">
+              <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i> ${isBookmarked ? 'Saved' : 'Bookmark'}
+            </button>
+          </div>
+        `;
+      });
+      ayahsContainer.innerHTML = html;
+      // bookmark toggle event
+      document.querySelectorAll('.bookmark-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const surahId = parseInt(btn.dataset.surah);
+          const ayahIdx = parseInt(btn.dataset.ayah);
+          toggleBookmark(surahId, ayahIdx, btn);
+        });
+      });
+    }
+
+    function toggleBookmark(surahId, ayahIdx, btnElement) {
+      const existing = bookmarks.findIndex(b => b.surahId === surahId && b.ayahIndex === ayahIdx);
+      if (existing === -1) {
+        bookmarks.push({ surahId, ayahIndex: ayahIdx });
+        btnElement.classList.add('active');
+        btnElement.innerHTML = '<i class="fa-solid fa-bookmark"></i> Saved';
+      } else {
+        bookmarks.splice(existing, 1);
+        btnElement.classList.remove('active');
+        btnElement.innerHTML = '<i class="fa-regular fa-bookmark"></i> Bookmark';
+      }
+      localStorage.setItem('quranBookmarks', JSON.stringify(bookmarks));
+      updateBookmarkHomeSection();
+    }
+
+    // update bookmark chips on home
+    function updateBookmarkHomeSection() {
+      if (bookmarks.length === 0) {
+        bookmarkSection.style.display = 'none';
+        return;
+      }
+      bookmarkSection.style.display = 'block';
+      let chips = '';
+      bookmarks.forEach(b => {
+        const surah = surahs.find(s => s.id === b.surahId);
+        if (surah) {
+          chips += `<div class="bookmark-chip" data-surah="${b.surahId}" data-ayah="${b.ayahIndex}"><i class="fa-solid fa-bookmark"></i> ${surah.englishName} (${b.ayahIndex+1})</div>`;
+        }
+      });
+      bookmarkChips.innerHTML = chips;
+      // click chip -> open surah at that ayah
+      document.querySelectorAll('.bookmark-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const surahId = parseInt(chip.dataset.surah);
+          const ayahIdx = parseInt(chip.dataset.ayah);
+          openSurah(surahId);
+          // optionally scroll to ayah? for simplicity just open
+        });
+      });
+    }
+
+    // ---------- audio beep simulation (offline "qari") ----------
+    function setupAudioBeep() {
+      // override audio player play with web audio beep (multiple qari = different frequencies)
+      audioPlayer.addEventListener('play', function playBeep() {
+        audioPlayer.pause(); // prevent actual loading
+        audioPlayer.currentTime = 0;
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const gain = ctx.createGain();
+        gain.connect(ctx.destination);
+        gain.gain.value = 0.1;
+
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+        // qari selection
+        const qari = qariSelect.value;
+        let freq = 440;
+        if (qari === 'beep2') freq = 523;
+        if (qari === 'beep3') freq = 659;
+        osc.frequency.value = freq;
+
+        osc.connect(gain);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.2); // short beep
+        alert('🎧 Demo audio: offline beep (Qari simulation)');
+      });
+    }
+
+    // ---------- search ----------
+    searchInput.addEventListener('input', (e) => {
+      renderSurahList(e.target.value);
+    });
+
+    // ---------- navigation ----------
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        showScreen(item.getAttribute('data-screen'));
+      });
+    });
+    backFromSurah.addEventListener('click', () => showScreen('home'));
+
+    // ---------- tasbeeh ----------
+    tapBtn.addEventListener('click', () => {
+      tasbeehCounter++;
+      tasbeehCount.innerText = tasbeehCounter;
+    });
+    resetTasbeeh.addEventListener('click', () => {
+      tasbeehCounter = 0;
+      tasbeehCount.innerText = '0';
+    });
+
+    // ---------- prayer times (static demo) ----------
+    function renderPrayerTimes() {
+      const times = {
+        Fajr: '05:12 AM',
+        Dhuhr: '12:28 PM',
+        Asr: '03:45 PM',
+        Maghrib: '06:22 PM',
+        Isha: '07:50 PM'
+      };
+      let html = '';
+      for (let [name, time] of Object.entries(times)) {
+        html += `<div class="prayer-item"><span>${name}</span> <span>${time}</span></div>`;
+      }
+      prayerTimesList.innerHTML = html;
+    }
+
+    // ---------- Qibla compass (mock, with fixed angle) ----------
+    let mockAngle = 45; // degrees from north
+    function drawCompass(angle) {
+      const ctx = compassCanvas.getContext('2d');
+      ctx.clearRect(0, 0, 280, 280);
+      // outer circle
+      ctx.beginPath();
+      ctx.arc(140, 140, 130, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      // inner markings
+      for (let i=0; i<360; i+=45) {
+        let rad = i * Math.PI/180;
+        let x1 = 140 + 110 * Math.sin(rad);
+        let y1 = 140 - 110 * Math.cos(rad);
+        let x2 = 140 + 120 * Math.sin(rad);
+        let y2 = 140 - 120 * Math.cos(rad);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = '#d4af3780';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+      // arrow (pointer)
+      let rad = angle * Math.PI/180;
+      let arrowX = 140 + 100 * Math.sin(rad);
+      let arrowY = 140 - 100 * Math.cos(rad);
+      ctx.beginPath();
+      ctx.moveTo(140, 140);
+      ctx.lineTo(arrowX, arrowY);
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 6;
+      ctx.stroke();
+      // center dot
+      ctx.beginPath();
+      ctx.arc(140, 140, 8, 0, 2*Math.PI);
+      ctx.fillStyle = '#d4af37';
+      ctx.fill();
+      compassDirection.innerText = `Qibla angle: ${angle}° (mock)`;
+    }
+
+    document.getElementById('calibrateCompass').addEventListener('click', () => {
+      mockAngle = (mockAngle + 15) % 360;
+      drawCompass(mockAngle);
+    });
+
+    // initialize
+    renderSurahList();
+    updateBookmarkHomeSection();
+    renderPrayerTimes();
+    drawCompass(mockAngle);
+
+    // hide bookmark section if empty
+    if (bookmarks.length === 0) bookmarkSection.style.display = 'none';
+
+    // simulate offline audio via web audio (already in setupAudioBeep)
+    // for first load, prepare dummy audio source
+    audioPlayer.src = 'data:audio/mp3,//silence'; // dummy
+
+    // reset tasbeeh on load
+    tasbeehCount.innerText = '0';
+
+    // pwa manifest placeholder (included in comments only)
+    console.log('PWA manifest and icon.png would be linked here');
+  })();
+</script>
+<!-- manifest placeholder (would be separate file) -->
+<link rel="manifest" href="manifest.json">
+<!-- icon placeholder comment: /icon.png 192x192 -->
+</body>
+</html>
