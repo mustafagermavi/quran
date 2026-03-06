@@ -4,467 +4,165 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>سوپەر ئەپی ئیسلامی · شووشەیی</title>
-  <!-- Vazirmatn font (Kurdish/Arabic friendly) & FontAwesome 6.5.0 -->
+  <!-- Vazirmatn font & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      background: #0b0f16;  /* deep base for glass contrast */
-      background-image: radial-gradient(circle at 30% 10%, #1a2f35 0%, #0a0e15 80%);
-      min-height: 100vh;
-      color: #eef2f6;
-      line-height: 1.6;
-      padding: 1rem 1rem 90px;  /* bottom space for floating nav */
-    }
-
-    /* glassmorphism core */
-    .glass-card {
-      background: rgba(10, 20, 25, 0.3);
-      backdrop-filter: blur(14px) saturate(180%);
-      -webkit-backdrop-filter: blur(14px) saturate(180%);
-      border: 1px solid rgba(45, 200, 180, 0.2);
-      border-radius: 32px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 200, 0.05) inset, 0 0 20px rgba(255, 215, 0, 0.2);
-      transition: transform 0.2s ease, border-color 0.2s;
-    }
-
-    .glass-card:hover {
-      border-color: rgba(0, 255, 200, 0.5);
-      box-shadow: 0 20px 40px rgba(0, 150, 140, 0.3), 0 0 0 1px rgba(0, 255, 200, 0.3) inset;
-    }
-
-    /* teal & gold accents */
-    .teal-glow {
-      color: #2dd4bf;
-      text-shadow: 0 0 8px #2dd4bf80;
-    }
-    .gold-glow {
-      color: #fbbf24;
-      text-shadow: 0 0 8px #fbbf2480;
-    }
-    .btn-teal {
-      background: rgba(45, 212, 191, 0.15);
-      border: 1px solid #2dd4bf;
-      color: #e0f2fe;
-      border-radius: 40px;
-      padding: 0.4rem 1rem;
-      font-weight: 500;
-      backdrop-filter: blur(5px);
-      transition: 0.2s;
-      cursor: default; /* static demo */
-    }
-    .btn-teal i {
-      color: #2dd4bf;
-    }
-    .btn-gold {
-      background: rgba(251, 191, 36, 0.15);
-      border: 1px solid #fbbf24;
-      color: #fef9c3;
-      border-radius: 40px;
-      padding: 0.4rem 1rem;
-      backdrop-filter: blur(5px);
-    }
-
-    /* layout */
-    .app-container {
-      max-width: 1300px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-    }
-
-    /* header */
-    .header-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.8rem 1.5rem;
-    }
-    .profile-avatar {
-      width: 52px;
-      height: 52px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #2dd4bf;
-      box-shadow: 0 0 15px #2dd4bf;
-    }
-    .profile-avatar i {
-      font-size: 2rem;
-      color: #b0f0e6;
-    }
-    .voice-search {
-      flex: 1 1 280px;
-      display: flex;
-      background: rgba(20, 40, 45, 0.4);
-      backdrop-filter: blur(16px);
-      border-radius: 60px;
-      border: 1px solid #2dd4bf60;
-      padding: 0.2rem 0.2rem 0.2rem 1.2rem;
-      align-items: center;
-    }
-    .voice-search i {
-      color: #fbbf24;
-      font-size: 1.2rem;
-      margin-left: 0.5rem;
-    }
-    .voice-search input {
-      background: transparent;
-      border: none;
-      color: white;
-      font-family: 'Vazirmatn', sans-serif;
-      font-size: 1rem;
-      width: 100%;
-      outline: none;
-    }
-    .voice-search input::placeholder {
-      color: #a0c0c0;
-      font-weight: 300;
-    }
-    .voice-search button {
-      background: rgba(45, 212, 191, 0.3);
-      border: none;
-      border-radius: 50px;
-      padding: 0.5rem 1.2rem;
-      margin-right: auto;
-      color: white;
-      font-family: 'Vazirmatn', sans-serif;
-      border: 1px solid #2dd4bf;
-      cursor: default;
-    }
-    .date-badge {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
-      padding: 0.4rem 1.3rem;
-      border-radius: 40px;
-      font-size: 0.9rem;
-      border: 1px solid #fbbf2460;
-      white-space: nowrap;
-    }
-    .night-mode-toggle {
-      background: #1e2a30;
-      border: 1px solid #90d0c0;
-      border-radius: 40px;
-      padding: 0.5rem 1.2rem;
-      color: #fbbf24;
-      cursor: default;
-    }
-
-    /* section titles */
-    .section-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      padding-right: 0.5rem;
-      border-right: 6px solid #fbbf24;
-      text-shadow: 0 0 5px #fbbf24;
-    }
-
-    /* prayer hub grid */
-    .prayer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 1rem;
-    }
-    .prayer-times-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .prayer-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.4rem 1rem;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 40px;
-      border: 1px solid #2dd4bf30;
-    }
-    .qibla-radar {
-      background: rgba(0, 30, 30, 0.5);
-      border-radius: 50%;
-      width: 100px;
-      height: 100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 3px solid #fbbf24;
-      box-shadow: 0 0 30px #2dd4bf;
-    }
-
-    /* modules grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.8rem;
-      margin-top: 1rem;
-    }
-
-    /* surah list */
-    .surah-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem;
-      border-bottom: 1px solid #2dd4bf30;
-    }
-    .makki-badge {
-      background: #1f4a40;
-      border-radius: 20px;
-      padding: 0.2rem 0.8rem;
-      font-size: 0.8rem;
-    }
-
-    /* copy buttons unique */
-    .copy-ayah-btn, .copy-dhikr-btn, .copy-special-btn {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid #2dd4bf;
-      border-radius: 30px;
-      padding: 0.3rem 1rem;
-      font-size: 0.8rem;
-      color: #ccf8f0;
-      backdrop-filter: blur(5px);
-      cursor: default;
-    }
-    .copy-ayah-btn i, .copy-dhikr-btn i {
-      color: #fbbf24;
-      margin-left: 0.3rem;
-    }
-
-    /* tasbih */
-    .tasbih-counter {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 2rem;
-      justify-content: center;
-    }
-
-    /* bottom nav floating */
-    .bottom-nav {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(5, 15, 20, 0.5);
-      backdrop-filter: blur(25px);
-      border: 1px solid #2dd4bf60;
-      border-radius: 60px;
-      padding: 0.6rem 1.5rem;
-      display: flex;
-      gap: 1.8rem;
-      box-shadow: 0 0 40px rgba(0, 255, 200, 0.3);
-      z-index: 1000;
-    }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #d3eae5;
-      font-size: 0.8rem;
-      cursor: default;
-    }
-    .nav-item i {
-      font-size: 1.4rem;
-      color: #fbbf24;
-      filter: drop-shadow(0 0 6px gold);
-    }
-
-    /* utility */
-    hr {
-      border: 0.5px solid #2dd4bf40;
-      margin: 1rem 0;
-    }
-    .badge {
-      background: #1e3f3a;
-      border-radius: 20px;
-      padding: 0.2rem 0.9rem;
-    }
-    .flex-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-  </style>
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app-container">
-
-  <!-- ========== ١. HEADER : profile, voice search, date, night mode ========= -->
-  <header class="glass-card header-row">
-    <div class="profile-avatar">
-      <i class="fas fa-user-astronaut"></i> <!-- avatar icon -->
-    </div>
-    <div class="voice-search">
-      <i class="fas fa-microphone-alt"></i>
-      <input type="text" placeholder="گەڕان بە دەنگ ... (AI)" value="">
-      <button class="voice-search-btn"><i class="fas fa-search"></i> گەڕان</button>
-    </div>
-    <div class="date-badge">
-      <i class="fas fa-calendar-alt teal-glow"></i> ١٤٤٦ هـ · 2025-03-06
-    </div>
-    <button class="night-mode-toggle"><i class="fas fa-moon"></i> شەو</button>
-  </header>
-
-  <!-- ========== ٢. PRAYER HUB ========= -->
-  <section class="glass-card" style="padding: 1.5rem;">
-    <h2 class="section-title"><i class="fas fa-mosque gold-glow"></i> ناوەندی نوێژ</h2>
-    <div class="prayer-grid">
-      <div class="prayer-times-list">
-        <div class="prayer-item"><span>بەیان</span> <span>٠٤:٢٣</span></div>
-        <div class="prayer-item"><span>نیوەڕۆ</span> <span>١٢:١٥</span></div>
-        <div class="prayer-item"><span>عەسر</span> <span>١٥:٤٠</span></div>
-        <div class="prayer-item"><span>مەغریب</span> <span>١٨:١٨</span></div>
-        <div class="prayer-item"><span>عیشا</span> <span>١٩:٤٥</span></div>
+  <div class="app-container">
+    <!-- ========== HEADER ========== -->
+    <header class="glass-card header-row">
+      <div class="profile-avatar">
+        <i class="fas fa-user-astronaut"></i>
       </div>
-      <div>
-        <div class="next-prayer" style="background: #0d2d2a; border-radius: 30px; padding: 0.8rem; text-align: center;">
-          <i class="fas fa-hourglass-half gold-glow"></i> نوێژی داهاتوو: عەسر · ٢:١٥ دەمێنێ
+      <div class="voice-search">
+        <i class="fas fa-microphone-alt"></i>
+        <input type="text" placeholder="گەڕان بە دەنگ ... (AI)">
+        <button class="voice-search-btn" id="voiceSearchBtn"><i class="fas fa-search"></i> گەڕان</button>
+      </div>
+      <div class="date-badge">
+        <i class="fas fa-calendar-alt teal-glow"></i> ١٤٤٦ هـ · 2025-03-06
+      </div>
+      <button class="night-mode-toggle" id="nightShiftToggle"><i class="fas fa-moon"></i> شەو</button>
+    </header>
+
+    <!-- ========== PRAYER HUB ========== -->
+    <section class="glass-card" style="padding: 1.5rem;">
+      <h2 class="section-title"><i class="fas fa-mosque gold-glow"></i> ناوەندی نوێژ</h2>
+      <div class="prayer-grid">
+        <div class="prayer-times-list"></div> <!-- filled by JS -->
+        <div>
+          <div class="next-prayer"><i class="fas fa-hourglass-half gold-glow"></i> نوێژی داهاتوو: بارکردن...</div>
+          <div style="margin-top: 1rem;" class="forbidden-times">
+            <span class="badge"><i class="fas fa-ban teal-glow"></i> ڕێگەنەدراو: ١٢:١٠-١٢:٥٠</span>
+          </div>
+          <!-- Ramadan info (hidden by default) -->
+          <div class="ramadan-info hidden" style="margin-top:1rem;">
+            <span class="badge"><i class="fas fa-moon gold-glow"></i> ئیفطار: <span id="iftarTime"></span> · سحور: <span id="suhurTime"></span></span>
+          </div>
         </div>
-        <div style="margin-top: 1rem;" class="forbidden-times">
-          <span class="badge"><i class="fas fa-ban teal-glow"></i> ڕێگەنەدراو: ١٢:١٠-١٢:٥٠</span>
-        </div>
-      </div>
-      <div class="qibla-radar">
-        <i class="fas fa-location-arrow fa-2x gold-glow" style="transform: rotate(45deg);"></i>
-        <span style="font-size: 0.8rem;">قبلە</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== ٣. QURAN SUITE with copy system (ayah copy) ========= -->
-  <section class="glass-card" style="padding: 1.5rem;">
-    <h2 class="section-title"><i class="fas fa-book-open teal-glow"></i> قورئان</h2>
-    <div class="flex-row" style="justify-content:space-between;">
-      <div><i class="fas fa-list-ul"></i> سورەتەکان:</div>
-      <div><select class="reciter-select" style="background:rgba(0,0,0,0.3); color:white; border-radius:30px; padding:0.3rem 1rem;"><option>شەریف · حەسەن</option></select></div>
-      <div><button class="btn-teal"><i class="fas fa-font"></i> عوسمانی</button></div>
-    </div>
-    <div style="max-height:200px; overflow:auto; margin:1rem 0;" class="surah-list">
-      <div class="surah-row"><span>١. الفاتحة <span class="makki-badge">مەکی</span></span><span>٧ ئایەت</span></div>
-      <div class="surah-row"><span>٢. البقرة <span class="makki-badge">مەدەنی</span></span><span>٢٨٦</span></div>
-      <div class="surah-row"><span>٣. آل عمران <span class="makki-badge">مەدەنی</span></span><span>٢٠٠</span></div>
-    </div>
-    <!-- word by word + copy example -->
-    <div style="background: rgba(0, 30, 30, 0.6); border-radius: 28px; padding: 1rem;">
-      <p style="font-size: 1.5rem; direction: ltr; text-align: right;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-      <p><i>بە ناوی خوای بەخشندەی میهرەبان</i> (کوردی)</p>
-      <div style="display:flex; justify-content:space-between;">
-        <span>سورەتی فاتحة · ئایەت ١</span>
-        <button class="copy-ayah-btn"><i class="fa-regular fa-copy"></i> کۆپی [عەرەبی + کوردی + ناوی سورەت + ژمارە]</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== ٤. SMART COPY SYSTEM explicit (also in spiritual) ========= -->
-  <!-- This module is demonstrated through Ayah above and Dhikr below -->
-
-  <!-- ========== ٥. SPIRITUAL SUITE (Adhkar + Tasbih + 99 names) ========= -->
-  <section class="glass-card" style="padding: 1.5rem;">
-    <h2 class="section-title"><i class="fas fa-star-and-crescent gold-glow"></i> ڕۆحانی</h2>
-    <div class="features-grid" style="grid-template-columns:1fr 1fr;">
-      <!-- morning/evening adhkar with copy -->
-      <div>
-        <h3><i class="fas fa-sun"></i> ئەذکاری بەیانی</h3>
-        <div style="background:#102c28; border-radius:20px; padding:0.8rem; margin:0.5rem 0;">
-          <p>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ (١٠٠)</p>
-          <button class="copy-dhikr-btn"><i class="fa-regular fa-copy"></i> کۆپی (عەرەبی + کوردی)</button>
-        </div>
-        <h3 style="margin-top:1rem;"><i class="fas fa-moon"></i> ئەذکاری ئێوارە</h3>
-        <div style="background:#102c28; border-radius:20px; padding:0.8rem;">
-          <p>أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ</p>
-          <button class="copy-dhikr-btn"><i class="fa-regular fa-copy"></i> کۆپی</button>
+        <div class="qibla-radar">
+          <i class="fas fa-location-arrow fa-2x"></i>
+          <span style="font-size: 0.8rem;">قبلە</span>
         </div>
       </div>
-      <div>
-        <div class="tasbih-counter">
-          <button class="btn-teal" style="border-radius:50%; width:50px; height:50px;">+</button>
-          <span><i class="fas fa-dharmachakra"></i> ٣٣</span>
-          <button class="btn-gold" style="border-radius:50%; width:50px; height:50px;">C</button>
+    </section>
+
+    <!-- ========== QURAN SUITE ========== -->
+    <section class="glass-card" style="padding: 1.5rem;">
+      <h2 class="section-title"><i class="fas fa-book-open teal-glow"></i> قورئان</h2>
+      <div class="flex-row" style="justify-content:space-between;">
+        <div><i class="fas fa-list-ul"></i> سورەتەکان:</div>
+        <div>
+          <select class="reciter-select" id="reciterSelect" style="background:rgba(0,0,0,0.3); color:white; border-radius:30px; padding:0.3rem 1rem;">
+            <option value="mishary">مشاری راشد</option>
+            <option value="husary">حساری</option>
+          </select>
         </div>
-        <div style="margin-top:1rem;">
-          <p><i class="fas fa-volume-high teal-glow"></i> ٩٩ ناوی خودا: <strong>الرحمن</strong> 
-          <button class="btn-teal"><i class="fas fa-play"></i> گوێگرتن</button></p>
+        <div><button class="btn-teal" id="uthmaniToggle"><i class="fas fa-font"></i> عوسمانی</button></div>
+      </div>
+      <div style="max-height:200px; overflow:auto; margin:1rem 0;" class="surah-list"></div>
+
+      <!-- Example Ayah container (dynamic in real app) -->
+      <div class="ayah-container" data-surah="1" data-surah-name="الفاتحة" data-ayah="1">
+        <p class="verse-arabic" style="font-size: 1.5rem;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+        <p class="translation-kurdish">بە ناوی خوای بەخشندەی میهرەبان</p>
+        <div style="display:flex; justify-content:space-between;">
+          <span>سورەتی فاتحة · ئایەت ١</span>
+          <button class="copy-ayah-btn"><i class="fa-regular fa-copy"></i> کۆپی</button>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========== ٦. EDUCATION : kids, alif-ba, timeline, quiz ========= -->
-  <section class="glass-card" style="padding: 1.5rem;">
-    <h2 class="section-title"><i class="fas fa-child gold-glow"></i> پەروەردە</h2>
-    <div class="features-grid" style="grid-template-columns:repeat(4,1fr); gap:0.8rem;">
-      <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-history"></i> چیرۆکی پێغەمبەران</div>
-      <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-a"></i> ئەلیف-با</div>
-      <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-timeline"></i> ھێڵی کاتی</div>
-      <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-question"></i> کویز</div>
-    </div>
-  </section>
+    <!-- ========== SPIRITUAL SUITE ========== -->
+    <section class="glass-card" style="padding: 1.5rem;">
+      <h2 class="section-title"><i class="fas fa-star-and-crescent gold-glow"></i> ڕۆحانی</h2>
+      <div class="features-grid" style="grid-template-columns:1fr 1fr;">
+        <div>
+          <h3><i class="fas fa-sun"></i> ئەذکاری بەیانی</h3>
+          <div class="tasbih-item" style="background:#102c28; border-radius:20px; padding:0.8rem; margin:0.5rem 0;">
+            <p>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ (١٠٠)</p>
+            <button class="copy-dhikr-btn"><i class="fa-regular fa-copy"></i> کۆپی</button>
+            <div style="margin-top:0.5rem;">
+              <span class="tasbih-count" data-dhikr="morning1">0</span>
+              <button class="btn-teal tasbih-btn" data-dhikr="morning1"><i class="fas fa-plus"></i></button>
+              <button class="btn-gold reset-tasbih" data-dhikr="morning1"><i class="fas fa-rotate-left"></i></button>
+            </div>
+          </div>
+          <h3 style="margin-top:1rem;"><i class="fas fa-moon"></i> ئەذکاری ئێوارە</h3>
+          <div class="tasbih-item" style="background:#102c28; border-radius:20px; padding:0.8rem;">
+            <p>أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ</p>
+            <button class="copy-dhikr-btn"><i class="fa-regular fa-copy"></i> کۆپی</button>
+          </div>
+        </div>
+        <div>
+          <div class="tasbih-counter">
+            <div class="bead"></div>
+            <span><i class="fas fa-dharmachakra"></i> <span class="tasbih-count" data-dhikr="global">33</span></span>
+            <button class="btn-teal tasbih-btn" data-dhikr="global" style="border-radius:50%; width:50px; height:50px;">+</button>
+          </div>
+          <div style="margin-top:1rem;">
+            <p><i class="fas fa-volume-high teal-glow"></i> ٩٩ ناوی خودا: <strong>الرحمن</strong> 
+            <button class="btn-teal"><i class="fas fa-play"></i> گوێگرتن</button></p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- ========== ٧. UTILITY TOOLS : inheritance, zakat, miracles ========= -->
-  <section class="glass-card" style="padding: 1.5rem;">
-    <h2 class="section-title"><i class="fas fa-calculator teal-glow"></i> ئامرازەکان</h2>
-    <div class="flex-row" style="justify-content:space-around;">
-      <span><i class="fas fa-scale-balanced"></i> میرات</span>
-      <span><i class="fas fa-coins"></i> زەکات</span>
-      <span><i class="fas fa-hand-sparkles"></i> موعجیزە زانستی</span>
-    </div>
-  </section>
+    <!-- ========== EDUCATION ========== -->
+    <section class="glass-card" style="padding: 1.5rem;">
+      <h2 class="section-title"><i class="fas fa-child gold-glow"></i> پەروەردە</h2>
+      <div class="features-grid" style="grid-template-columns:repeat(4,1fr); gap:0.8rem;">
+        <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-history"></i> چیرۆکی پێغەمبەران</div>
+        <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-a"></i> ئەلیف-با</div>
+        <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-timeline"></i> ھێڵی کاتی</div>
+        <div class="btn-teal" style="display:block; text-align:center;"><i class="fas fa-question"></i> کویز</div>
+      </div>
+    </section>
 
-  <!-- ========== ٨. MEDIA & NAV + bottom nav (floating) ========= -->
-  <section class="glass-card" style="padding: 1.5rem; margin-bottom: 10px;">
-    <h2 class="section-title"><i class="fas fa-video gold-glow"></i> میدیا</h2>
-    <div style="display:flex; gap:2rem; justify-content:center;">
-      <div><i class="fas fa-tower-broadcast fa-2x teal-glow"></i> مەکە ڕاستەوخۆ</div>
-      <div><i class="fas fa-clapperboard fa-2x gold-glow"></i> ڕیلە ئیسلامی</div>
-    </div>
-  </section>
+    <!-- ========== UTILITY TOOLS ========== -->
+    <section class="glass-card" style="padding: 1.5rem;">
+      <h2 class="section-title"><i class="fas fa-calculator teal-glow"></i> ئامرازەکان</h2>
+      <div class="flex-row" style="justify-content:space-around;">
+        <span><i class="fas fa-scale-balanced"></i> میرات</span>
+        <span><i class="fas fa-coins"></i> زەکات</span>
+        <span class="miracle-card" style="padding:0.5rem 1rem;"><i class="fas fa-hand-sparkles"></i> موعجیزە زانستی</span>
+      </div>
+    </section>
 
-  <!-- extra note: live Makkah stream (placeholder) -->
-  <div style="height:20px;"></div>
+    <!-- ========== MEDIA ========== -->
+    <section class="glass-card" style="padding: 1.5rem; margin-bottom: 10px;">
+      <h2 class="section-title"><i class="fas fa-video gold-glow"></i> میدیا</h2>
+      <div style="display:flex; gap:2rem; justify-content:center;">
+        <div><i class="fas fa-tower-broadcast fa-2x teal-glow"></i> مەکە ڕاستەوخۆ</div>
+        <div><i class="fas fa-clapperboard fa-2x gold-glow"></i> ڕیلە ئیسلامی</div>
+      </div>
+    </section>
 
-  <!-- ========== FLOATING GLASS BOTTOM NAV ========== -->
+    <!-- Khatm certificate canvas (hidden) -->
+    <canvas id="certificateCanvas" style="display:none;"></canvas>
+
+    <!-- Copy toast notification -->
+    <div class="copy-toast"></div>
+  </div>
+
+  <!-- Floating Bottom Navigation -->
   <div class="bottom-nav">
-    <div class="nav-item"><i class="fas fa-home"></i><span>سەرەکی</span></div>
+    <div class="nav-item active"><i class="fas fa-home"></i><span>سەرەکی</span></div>
     <div class="nav-item"><i class="fas fa-book-open"></i><span>قورئان</span></div>
     <div class="nav-item"><i class="fas fa-kaaba"></i><span>قبلە</span></div>
     <div class="nav-item"><i class="fas fa-pray"></i><span>زیکر</span></div>
     <div class="nav-item"><i class="fas fa-bars"></i><span>زیاتر</span></div>
   </div>
 
-  <!-- small descriptive hint for copy system: every ayah/adhkar has copy button (demonstrated) -->
-  <div style="margin-top: 1rem; text-align: center; opacity:0.7; font-size:0.9rem;">
-    <i class="fas fa-copy teal-glow"></i> هەر ئایەت و ئەذکارێک دوگمەی کۆپی هەیە [ عەرەبی + کوردی + ناوی سورەت + ژمارە ]
-  </div>
+  <!-- Kids mode toggle (hidden, could be placed in settings) -->
+  <input type="checkbox" id="kidsModeToggle" style="display:none;">
 
-  <!-- additional hidden modules are present: Digital Tasbih counter, 99 names audio, quiz etc already shown -->
-  <!-- also note: inheritance calculator, zakat are represented as icons -->
-
-  <!-- Make sure all unique classes exist: -->
-  <!-- profile-avatar, voice-search-btn, night-mode-toggle, reciter-select, uthmani-toggle, copy-ayah-btn, copy-dhikr-btn, tasbih-increment (the + button), etc. -->
-</div>
-<!-- end app-container -->
-
-<!-- simple script to demonstrate static nature but can be extended (not required) -->
-<script>
-  // just a placeholder to satisfy any "real-time" feel — no actual logic.
-  console.log('Glass Islamic Super App – Kurdish RTL');
-</script><script src="app.js"></script> 
-
+  <!-- Main script -->
+  <script src="app.js"></script>
 </body>
 </html>
