@@ -1,352 +1,485 @@
-/* ===== style.css ===== */
+/* =============================================
+   style.css – Hyper-Realistic Dark Glassmorphism
+   Islamic Super App · Elite UI/UX Engineering
+   ============================================= */
+
+/* ---------- CSS Variables (Design Tokens) ---------- */
+:root {
+  /* OLED background & shadows */
+  --bg-oled: #000000;
+  --bg-deep-navy: #001220;
+  --shadow-navy: 0 20px 35px -8px rgba(0, 18, 32, 0.8);
+
+  /* Gold gradients */
+  --gold-gradient: linear-gradient(135deg, #FFD700, #B8860B);
+  --gold-light: #f5e56b;
+  --gold-deep: #b8860b;
+
+  /* Neon Blue for icons */
+  --neon-blue: #00F2FF;
+  --neon-glow: 0 0 15px #00F2FF, 0 0 30px #00F2FF80;
+
+  /* Glass background */
+  --glass-bg: rgba(0, 10, 18, 0.4);
+  --glass-border: rgba(255, 215, 0, 0.3);
+  --glass-border-hover: rgba(255, 215, 0, 0.8);
+
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-gold: #FFD700;
+  --text-offwhite: #E0E0E0;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* ---------- Base & Reset ---------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Vazirmatn', sans-serif;
 }
 
 body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: var(--bg-oled);
+  background-image: radial-gradient(circle at 30% 30%, var(--bg-deep-navy) 0%, #000000 90%);
+  color: var(--text-offwhite);
+  line-height: 1.8;
   min-height: 100vh;
-  background: #0b1a2a; /* fallback */
-  background-image: radial-gradient(circle at 30% 40%, #2a4b5f 0%, #0a111f 70%),
-                    radial-gradient(circle at 80% 70%, #1d3a47 0%, transparent 50%);
-  background-attachment: fixed;
-  background-size: cover;
   position: relative;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  transition: background-image 0.3s, color 0.3s;
+  overflow-x: hidden;
 }
 
-/* dark overlay (fixed with bokeh) */
+/* Grainy texture overlay (frosted glass grain) */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+  opacity: 0.08;
   pointer-events: none;
-  z-index: 0;
+  z-index: 9999;
 }
 
-body.light-theme::before {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-body.light-theme {
-  color: #1a1f2a;
-  text-shadow: none;
-}
-
-.app-container {
-  position: relative;
-  z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 1rem 80px 1rem;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ===== GLASS COMPONENTS ===== */
-.glass-header {
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-top: 1px solid rgba(255,255,255,0.4); /* reflective */
-  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
+/* ---------- Glass Card (base) ---------- */
 .glass-card {
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-top: 1px solid rgba(255,255,255,0.4); /* reflective light */
-  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
-  padding: 1.25rem;
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-body.light-theme .glass-card,
-body.light-theme .glass-header,
-body.light-theme .bottom-nav {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255,255,255,0.5);
-  color: #1e2a3a;
-}
-
-.sharp {
-  border-radius: 0;
-}
-
-.rounded-btn, .icon-btn, .glass-btn, .nav-item, .back-btn {
-  border-radius: 40px;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(8px);
-  padding: 0.5rem 1.2rem;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s;
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-body.light-theme .rounded-btn,
-body.light-theme .icon-btn,
-body.light-theme .glass-btn,
-body.light-theme .nav-item {
-  background: rgba(255,255,255,0.6);
-  color: #1f2a3f;
-  border-color: rgba(255,255,255,0.9);
-}
-
-.rounded-btn:hover, .nav-item:hover {
-  background: var(--accent);
-  color: white;
-}
-
-.icon-btn {
-  padding: 0.4rem 0.8rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid var(--glass-border);
   border-radius: 30px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), var(--shadow-navy), 0 0 0 1px rgba(255, 215, 0, 0.1) inset;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
 }
 
-:root {
-  --accent: #4a9bb5;
+/* Liquid gold border animation on hover */
+.glass-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 30px 50px -15px #000000, 0 0 30px rgba(255, 215, 0, 0.5), 0 0 0 1px #FFD700 inset;
+  transform: translateY(-5px) scale(1.01);
 }
 
-.accent-text {
-  color: var(--accent);
-  text-shadow: 0 0 6px #4a9bb5;
+/* ---------- Typography ---------- */
+h1, h2, h3, h4, .section-title {
+  font-weight: 600;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.5px;
 }
 
-/* ===== header inner ===== */
-.header-welcome .welcome {
-  font-size: 1.4rem;
-  margin-bottom: 0.2rem;
+.section-title {
+  font-size: 1.8rem;
+  border-right: 6px solid #FFD700;
+  padding-right: 1rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 15px #FFD70080;
 }
 
-.hijri-today {
-  font-size: 0.9rem;
+/* Quranic verses: bold gold */
+.quran-text, .verse-arabic {
+  font-weight: 700;
+  color: var(--text-gold);
+  text-shadow: 0 0 12px #FFD700;
+  font-size: 1.6rem;
+  line-height: 2;
+}
+
+/* Kurdish translations: thin off-white */
+.translation-kurdish {
+  font-weight: 300;
+  color: var(--text-offwhite);
   opacity: 0.9;
 }
 
-.search-wrapper {
-  display: flex;
-  align-items: center;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(5px);
-  padding: 0.3rem 0.8rem;
-  gap: 0.5rem;
-  border: 1px solid rgba(255,255,255,0.2);
+/* ---------- Icons (Neon Blue) ---------- */
+i, .icon {
+  color: var(--neon-blue);
+  filter: drop-shadow(0 0 8px var(--neon-blue));
+  transition: var(--transition-smooth);
 }
 
-.search-wrapper input {
+i:hover {
+  filter: drop-shadow(0 0 15px var(--neon-blue));
+}
+
+/* ---------- Buttons (Neumorphic 3D inside glass) ---------- */
+.btn-teal, .btn-gold, .voice-search-btn, .night-mode-toggle, .copy-ayah-btn, .copy-dhikr-btn {
+  background: rgba(0, 30, 40, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 50px;
+  padding: 0.6rem 1.4rem;
+  font-family: 'Vazirmatn', sans-serif;
+  font-weight: 500;
+  color: var(--text-offwhite);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), 0 -4px 8px rgba(255, 255, 255, 0.02) inset, 0 4px 8px rgba(0, 242, 255, 0.1) inset;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Water ripple effect on click (simulated with pseudo) */
+.btn-teal:active::after, .btn-gold:active::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 242, 255, 0.6) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple 0.4s ease-out;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+/* Neon blue icons inside buttons */
+.btn-teal i, .btn-gold i, .voice-search-btn i {
+  color: var(--neon-blue);
+  margin-left: 0.5rem;
+}
+
+/* ---------- Floating Glass Search Bar ---------- */
+.voice-search {
+  background: rgba(0, 10, 20, 0.5);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 60px;
+  padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+  box-shadow: 0 10px 25px -5px #000000;
+  transition: var(--transition-smooth);
+}
+
+.voice-search:focus-within {
+  border-color: #FFD700;
+  box-shadow: 0 0 25px #FFD700, 0 10px 25px -5px black;
+}
+
+.voice-search input {
   background: transparent;
   border: none;
   color: white;
-  font-family: inherit;
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 1rem;
+  width: 100%;
   outline: none;
-  width: 180px;
 }
 
-body.light-theme .search-wrapper input {
-  color: #111;
+.voice-search input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 300;
 }
 
-.last-read {
-  white-space: nowrap;
-}
-
-/* ===== bottom navigation ===== */
+/* ---------- Floating Bottom Navigation ---------- */
 .bottom-nav {
-  position: fixed;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  display: flex;
-  gap: 0.5rem;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(15px);
-  padding: 0.5rem 1.2rem;
-  border-radius: 50px;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-top: 1px solid rgba(255,255,255,0.4);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  z-index: 100;
+  background: rgba(0, 8, 12, 0.6);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 80px;
+  padding: 0.6rem 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 255, 0.3);
 }
 
 .nav-item {
+  display: flex;
   flex-direction: column;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.75rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  color: rgba(255,255,255,0.8);
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  transition: var(--transition-smooth);
 }
 
 .nav-item i {
+  font-size: 1.8rem;
+  color: var(--neon-blue);
+  filter: drop-shadow(0 0 10px var(--neon-blue));
+  transition: all 0.2s;
+}
+
+/* Pulse glow on active tab (use .active class) */
+.nav-item.active i {
+  animation: pulse-glow 1.5s infinite;
+  color: #FFD700;
+  filter: drop-shadow(0 0 20px #FFD700);
+}
+
+@keyframes pulse-glow {
+  0% { filter: drop-shadow(0 0 10px #FFD700); }
+  50% { filter: drop-shadow(0 0 25px #FFD700), drop-shadow(0 0 40px #FFA500); }
+  100% { filter: drop-shadow(0 0 10px #FFD700); }
+}
+
+/* ---------- Prayer Times (Large neon timers) ---------- */
+.prayer-times-list .prayer-item {
+  background: rgba(0, 20, 30, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  border-radius: 40px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--neon-blue);
+  text-shadow: 0 0 15px var(--neon-blue);
+  position: relative;
+  overflow: hidden;
+}
+
+.prayer-times-list .prayer-item::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 120%;
+  height: 140%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" opacity="0.08"><path d="M40 50 Q 80 20, 120 50 T 200 50" stroke="%2300F2FF" fill="none" stroke-width="2"/><path d="M0 70 Q 40 40, 80 70 T 160 70" stroke="%23FFD700" fill="none" stroke-width="1.5"/></svg>');
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.next-prayer {
+  font-size: 1.3rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #FFD700;
+  border-radius: 40px;
+  padding: 0.8rem;
+  text-align: center;
+  color: #FFD700;
+  backdrop-filter: blur(12px);
+}
+
+/* ---------- Qibla Radar (3D Golden Compass) ---------- */
+.qibla-radar {
+  background: rgba(0, 5, 10, 0.7);
+  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #FFD700;
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), 0 0 0 2px rgba(0, 242, 255, 0.5) inset;
+  position: relative;
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+}
+
+/* Kaaba image inside (would be set as background, but we use pseudo for demo) */
+.qibla-radar::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Kaaba_at_Masjid_al-Haram_Mecca_Saudi_Arabia_-_panoramio.jpg/800px-Kaaba_at_Masjid_al-Haram_Mecca_Saudi_Arabia_-_panoramio.jpg') center/cover;
+  border-radius: 50%;
+  opacity: 0.3;
+  filter: blur(8px);
+  transition: filter 0.5s, opacity 0.5s;
+}
+
+/* sharpen when aligned (simulate alignment with .aligned class) */
+.qibla-radar.aligned::after {
+  filter: blur(0);
+  opacity: 1;
+  box-shadow: 0 0 30px gold;
+}
+
+.qibla-radar i {
+  font-size: 3rem;
+  color: #FFD700;
+  filter: drop-shadow(0 0 20px #FFD700);
+  transform: rotate(45deg); /* needle direction */
+  z-index: 2;
+}
+
+/* ---------- Tasbih 3D Crystal Bead ---------- */
+.tasbih-counter .bead {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(0,242,255,0.4));
+  border-radius: 50%;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,215,0,0.3) inset, 0 0 30px #00F2FF;
+  transform-style: preserve-3d;
+  transition: transform 0.2s;
+  animation: float 3s infinite ease-in-out;
+}
+
+.tasbih-counter .bead:active {
+  transform: rotateX(30deg) rotateY(10deg) scale(0.95);
+  box-shadow: 0 0 50px #00F2FF;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+/* ---------- Copy Notification Toast ---------- */
+.copy-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(30px);
+  border: 1px solid #FFD700;
+  border-radius: 60px;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 0 100px rgba(255,215,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  z-index: 10000;
+}
+
+.copy-toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
+.copy-toast i {
+  font-size: 2.5rem;
+  color: #FFD700;
+  filter: drop-shadow(0 0 20px #FFD700);
+}
+
+.copy-toast span {
+  color: #FFD700;
+  font-weight: 600;
   font-size: 1.2rem;
 }
 
-.nav-item.active {
-  color: var(--accent);
-  background: rgba(74,155,181,0.2);
-  text-shadow: 0 0 8px #4a9bb5;
+/* ---------- Skeleton Loading with Shimmer ---------- */
+.skeleton-card {
+  background: rgba(30, 30, 40, 0.3);
+  border-radius: 30px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* ===== sections ===== */
-.page-section {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
+.skeleton-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shimmer 2s infinite;
 }
 
-.page-section.active {
-  display: block;
-  opacity: 1;
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
 }
 
-.cards-grid {
+/* ---------- Scientific Miracle Cards (Galaxy Purple) ---------- */
+.miracle-card {
+  background: linear-gradient(145deg, #1a0b2e, #0e0a1a);
+  border: 1px solid #a855f7;
+  box-shadow: 0 0 40px #a855f7, 0 0 10px #3b0764 inset;
+  border-radius: 30px;
+  padding: 1.5rem;
+  color: white;
+  backdrop-filter: blur(10px);
+  transition: var(--transition-smooth);
+}
+
+.miracle-card:hover {
+  box-shadow: 0 0 70px #c084fc, 0 0 20px #a855f7 inset;
+}
+
+/* ---------- Parallax (mouse move effect) ---------- */
+.parallax-bg {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+/* ---------- Snap Scroll (mobile) ---------- */
+.snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* ---------- Responsive Grid / Flex ---------- */
+.features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
+  gap: 1.8rem;
 }
 
-/* surah grid inside card */
-.surah-grid {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-top: 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+/* ---------- Additional Polish ---------- */
+hr {
+  border: 0.5px solid rgba(255, 215, 0, 0.2);
+  margin: 2rem 0;
 }
 
-.surah-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0.8rem;
-  background: rgba(0,0,0,0.2);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-top: 1px solid rgba(255,255,255,0.2);
-  cursor: pointer;
-  transition: 0.2s;
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.surah-item:hover {
-  background: rgba(74,155,181,0.3);
-  border-color: var(--accent);
+/* Track */
+::-webkit-scrollbar-track {
+  background: #001220;
 }
 
-.surah-arabic {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.surah-kurdish {
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-/* verse detail */
-.verses-container {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.verse-card {
-  background: rgba(0,0,0,0.25);
-  backdrop-filter: blur(5px);
-  padding: 1rem;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-top: 1px solid rgba(255,255,255,0.3);
-}
-
-.verse-arabic {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-}
-
-.verse-translation {
-  font-size: 1rem;
-  color: #ddd;
-  margin-bottom: 0.5rem;
-}
-
-.verse-actions {
-  display: flex;
-  gap: 0.6rem;
-  justify-content: flex-end;
-}
-
-/* prayer rows */
-.prayer-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.2rem 0;
-  border-bottom: 1px dashed rgba(255,255,255,0.2);
-}
-
-.qibla-row {
-  margin-top: 0.7rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.compass-arrow {
-  transform: rotate(45deg);
-  margin-left: auto;
-  color: var(--accent);
-}
-
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0;
-}
-
-.audio-player {
-  width: 100%;
-  margin: 1rem 0;
-  filter: invert(0.1);
-}
-
-/* responsive */
-@media (max-width: 600px) {
-  .glass-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .bottom-nav {
-    padding: 0.3rem;
-    gap: 0.2rem;
-  }
-  .nav-item span {
-    display: none;
-  }
-  .nav-item i {
-    font-size: 1.4rem;
-  }
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #FFD700;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #FFD700;
 }
