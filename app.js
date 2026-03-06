@@ -26,7 +26,7 @@ class IslamicSuperApp {
     this.prayer = new PrayerManager(this);
     this.dhikr = new DhikrManager(this);
     this.quran = new QuranManager(this);
-    uiManager = new UIManager(this);        // will be attached to window for simplicity
+    this.ui = new UIManager(this);
     this.compass = new CompassManager(this);
     this.voice = new VoiceManager(this);
     this.khatm = new KhatmManager(this);
@@ -44,8 +44,11 @@ class IslamicSuperApp {
     this.voice.init();
     this.khatm.init();
     // Event listeners for UI toggles
-    document.getElementById('kidsModeToggle')?.addEventListener('change', (e) => uiManager.toggleKidsMode(e.target.checked));
-    document.getElementById('nightShiftToggle')?.addEventListener('change', (e) => uiManager.toggleNightShift(e.target.checked));
+    document.getElementById('kidsModeToggle')?.addEventListener('change', (e) => this.ui.toggleKidsMode(e.target.checked));
+    document.getElementById('nightShiftToggle')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.ui.toggleNightShift(!this.settings.nightShift);
+    });
   }
 
   applyBatterySaver() {
@@ -121,7 +124,7 @@ class PrayerManager {
     this.app = app;
     this.timer = null;
     this.nextPrayer = null;
-    this.adhanAudio = new Audio('/assets/adhan.mp3');
+    this.adhanAudio = new Audio('https://www.islamcan.com/audio/adhan/azan1.mp3'); // example URL
   }
 
   async init() {
@@ -222,7 +225,6 @@ class PrayerManager {
   }
 
   setRamadanTimes() {
-    // Auto-calculate Iftar/Suhur if month is Ramadan (simplified)
     const today = new Date();
     const month = today.getMonth() + 1;
     if (month === 3 || month === 4) { // approximate
@@ -264,7 +266,7 @@ class DhikrManager {
     this.counts[id] = (this.counts[id] + 1) % 100; // max 99
     this.updateDisplay(id);
     this.app.settings.save('dhikrCounts', this.counts);
-    if (navigator.vibrate) navigator.vibrate(50); // haptic feedback
+    if (navigator.vibrate) navigator.vibrate(50);
   }
 
   reset(id) {
@@ -287,10 +289,13 @@ class DhikrManager {
   startHourlyReminder() {
     setInterval(() => {
       const now = new Date();
-      if (now.getMinutes() === 0) { // every hour
-        new Notification('ئەذکار', { body: 'کاتی یادکردنەوەی خوا' });
+      if (now.getMinutes() === 0) {
+        if (Notification.permission === 'granted') {
+          new Notification('ئەذکار', { body: 'کاتی یادکردنەوەی خوا' });
+        }
       }
     }, 60000);
+    if (Notification.permission === 'default') Notification.requestPermission();
   }
 }
 
@@ -301,21 +306,23 @@ class QuranManager {
     this.currentSurah = app.settings.lastAyah?.surah || 1;
     this.currentAyah = app.settings.lastAyah?.ayah || 1;
     this.audio = new Audio();
+    this.surahList = [];
   }
 
   async init() {
     await this.loadSurahList();
     this.restoreLastAyah();
-    this.setupReciter();
     this.setupCopyButtons();
     this.setupScrollTracking();
-    this.setupVoiceSearchCallback();
+    window.searchQuran = (term) => this.search(term);
   }
 
   async loadSurahList() {
-    // In production, load from JSON. Here we simulate.
-    const response = await fetch('/data/surah.json');
-    this.surahList = await response.json();
+    // Simulated data – in production use a JSON file.
+    this.surahList = [
+      { id: 1, name: 'الفاتحة', type: 'مەکی', verses: 7, translation: 'فاتحة' },
+      { id: 2, name: 'البقرة', type: 'مەدەنی', verses: 286, translation: 'بقرة' }
+    ];
     this.renderSurahList();
   }
 
@@ -331,7 +338,6 @@ class QuranManager {
   }
 
   restoreLastAyah() {
-    // Scroll to last read ayah, highlight
     const ayahEl = document.querySelector(`[data-ayah="${this.currentAyah}"]`);
     if (ayahEl) {
       ayahEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -342,15 +348,14 @@ class QuranManager {
   setupCopyButtons() {
     document.querySelectorAll('.copy-ayah-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const ayahId = e.target.closest('[data-ayah]')?.dataset.ayah;
-        if (!ayahId) return;
-        // Simulate fetching ayah text
-        const arabic = e.target.closest('.ayah-container')?.querySelector('.verse-arabic')?.textContent || '';
-        const kurdish = e.target.closest('.ayah-container')?.querySelector('.translation-kurdish')?.textContent || '';
-        const surahName = e.target.closest('[data-surah]')?.dataset.surahName || '';
-        const ayahNumber = ayahId;
+        const container = e.target.closest('.ayah-container');
+        if (!container) return;
+        const arabic = container.querySelector('.verse-arabic')?.textContent || '';
+        const kurdish = container.querySelector('.translation-kurdish')?.textContent || '';
+        const surahName = container.dataset.surahName || '';
+        const ayahNumber = container.dataset.ayah || '';
         const textToCopy = `${arabic}\n${kurdish}\nسورەتی ${surahName} · ئایەت ${ayahNumber}`;
-        navigator.clipboard.writeText(textToCopy).then(() => uiManager.showCopyToast());
+        navigator.clipboard.writeText(textToCopy).then(() => this.app.ui.showCopyToast());
       });
     });
   }
@@ -370,27 +375,11 @@ class QuranManager {
     document.querySelectorAll('[data-ayah]').forEach(el => observer.observe(el));
   }
 
-  setupReciter() {
-    document.getElementById('reciterSelect')?.addEventListener('change', (e) => {
-      this.reciter = e.target.value;
-    });
-  }
-
-  playAyah(surah, ayah) {
-    // Base URL for recitation (example)
-    this.audio.src = `https://cdn.islamic.com/${this.reciter}/${surah.toString().padStart(3,'0')}${ayah.toString().padStart(3,'0')}.mp3`;
-    this.audio.play();
-  }
-
-  setupVoiceSearchCallback() {
-    // Called from VoiceManager
-    window.searchQuran = (term) => {
-      // Simple search in surah names
-      const matched = this.surahList.find(s => s.name.includes(term) || s.translation.includes(term));
-      if (matched) {
-        document.querySelector(`[data-surah="${matched.id}"]`)?.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
+  search(term) {
+    const matched = this.surahList.find(s => s.name.includes(term) || s.translation.includes(term));
+    if (matched) {
+      document.querySelector(`[data-surah="${matched.id}"]`)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }
 
@@ -402,19 +391,16 @@ class UIManager {
 
   toggleKidsMode(active) {
     this.app.settings.save('kidsMode', active);
-    document.body.classList.toggle('kids-mode', active);
   }
 
   toggleNightShift(active) {
     this.app.settings.save('nightShift', active);
-    document.body.classList.toggle('night-shift', active);
     if (active) this.applyNightShiftFilter();
   }
 
   applyNightShiftFilter() {
-    // Blue light filter based on sunset
     const now = new Date();
-    const sunset = this.app.prayer.timings?.Sunset; // "18:30"
+    const sunset = this.app.prayer.timings?.Sunset;
     if (sunset) {
       const [h, m] = sunset.split(':').map(Number);
       const sunsetTime = new Date(now);
@@ -428,30 +414,22 @@ class UIManager {
   }
 
   showCopyToast() {
-    const toast = document.querySelector('.copy-toast') || this.createToast();
+    const toast = document.querySelector('.copy-toast');
+    if (!toast) return;
+    toast.innerHTML = '<i class="fa-regular fa-circle-check"></i><span>کۆپی سەرکەوتوو بوو</span>';
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2000);
   }
-
-  createToast() {
-    const toast = document.createElement('div');
-    toast.className = 'copy-toast';
-    toast.innerHTML = '<i class="fa-regular fa-circle-check"></i><span>کۆپی سەرکەوتوو بوو</span>';
-    document.body.appendChild(toast);
-    return toast;
-  }
 }
 
-/********** COMPASS MANAGER (Qibla) **********/
+/********** COMPASS MANAGER **********/
 class CompassManager {
   constructor(app) {
     this.app = app;
-    this.qibla = 0; // will be calculated
   }
 
   async init() {
     if (!window.DeviceOrientationEvent) return;
-    // For iOS 13+ need permission
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
       try {
         const permission = await DeviceOrientationEvent.requestPermission();
@@ -462,17 +440,14 @@ class CompassManager {
   }
 
   handleOrientation(event) {
-    const azimuth = event.webkitCompassHeading || event.alpha; // alpha = 0 -> north
+    const azimuth = event.webkitCompassHeading || event.alpha;
     if (azimuth === null) return;
-    // Qibla direction from Makkah (approx 137° from north for many locations)
-    // In real app, compute based on user location.
-    const qiblaDirection = 137; // fixed example, should be dynamic
+    const qiblaDirection = 137; // example – should be calculated based on user location
     const difference = (qiblaDirection - azimuth + 360) % 360;
     const compassNeedle = document.querySelector('.qibla-radar i');
     if (compassNeedle) {
       compassNeedle.style.transform = `rotate(${difference}deg)`;
     }
-    // check if aligned (within 5°)
     if (Math.abs(difference) < 5) {
       document.querySelector('.qibla-radar')?.classList.add('aligned');
     } else {
@@ -488,7 +463,7 @@ class VoiceManager {
     this.recognition = null;
     if ('webkitSpeechRecognition' in window) {
       this.recognition = new webkitSpeechRecognition();
-      this.recognition.lang = 'ar-SA'; // or Kurdish?
+      this.recognition.lang = 'ar-SA';
       this.recognition.continuous = false;
       this.recognition.interimResults = false;
     }
@@ -512,7 +487,7 @@ class VoiceManager {
   }
 }
 
-/********** KHATM MANAGER (Reading completion certificate) **********/
+/********** KHATM MANAGER **********/
 class KhatmManager {
   constructor(app) {
     this.app = app;
@@ -526,12 +501,6 @@ class KhatmManager {
 
   loadProgress() {
     this.pagesRead = storage.get('khatmPages') || 0;
-    this.updateUI();
-  }
-
-  updateUI() {
-    document.getElementById('khatmProgress')?.setAttribute('value', this.pagesRead);
-    document.getElementById('khatmPercent').textContent = Math.round((this.pagesRead / 604) * 100) + '%';
   }
 
   setupCertificateButton() {
@@ -552,7 +521,6 @@ class KhatmManager {
     ctx.fillStyle = '#000';
     ctx.fillText(`بە ناوی: بەکارهێنەر`, 250, 300);
     ctx.fillText(`ڕێکەوت: ${new Date().toLocaleDateString('ku')}`, 250, 400);
-    // Show download link
     const link = document.createElement('a');
     link.download = 'khatm-certificate.png';
     link.href = canvas.toDataURL();
@@ -560,8 +528,7 @@ class KhatmManager {
   }
 }
 
-/********** INITIALIZE APP **********/
-let uiManager; // global for access from other modules
+/********** START THE APP **********/
 window.addEventListener('DOMContentLoaded', () => {
   window.app = new IslamicSuperApp();
 });
