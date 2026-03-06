@@ -3,43 +3,28 @@
    Islamic Super App · Elite UI/UX Engineering
    ============================================= */
 
-/* ---------- CSS Variables (Design Tokens) ---------- */
 :root {
-  /* OLED background & shadows */
   --bg-oled: #000000;
   --bg-deep-navy: #001220;
   --shadow-navy: 0 20px 35px -8px rgba(0, 18, 32, 0.8);
-
-  /* Gold gradients */
   --gold-gradient: linear-gradient(135deg, #FFD700, #B8860B);
   --gold-light: #f5e56b;
   --gold-deep: #b8860b;
-
-  /* Neon Blue for icons */
   --neon-blue: #00F2FF;
   --neon-glow: 0 0 15px #00F2FF, 0 0 30px #00F2FF80;
-
-  /* Glass background */
   --glass-bg: rgba(0, 10, 18, 0.4);
   --glass-border: rgba(255, 215, 0, 0.3);
   --glass-border-hover: rgba(255, 215, 0, 0.8);
-
-  /* Text colors */
   --text-primary: #ffffff;
   --text-gold: #FFD700;
   --text-offwhite: #E0E0E0;
-
-  /* Spacing */
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: 1.5rem;
   --space-lg: 2rem;
-
-  /* Transitions */
   --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-/* ---------- Base & Reset ---------- */
 * {
   margin: 0;
   padding: 0;
@@ -55,9 +40,10 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  padding: 1rem 1rem 90px;
 }
 
-/* Grainy texture overlay (frosted glass grain) */
+/* Grainy texture overlay */
 body::before {
   content: "";
   position: fixed;
@@ -71,7 +57,7 @@ body::before {
   z-index: 9999;
 }
 
-/* ---------- Glass Card (base) ---------- */
+/* Glass Card */
 .glass-card {
   background: var(--glass-bg);
   backdrop-filter: blur(25px) saturate(180%);
@@ -84,15 +70,14 @@ body::before {
   overflow: hidden;
 }
 
-/* Liquid gold border animation on hover */
 .glass-card:hover {
   border-color: var(--glass-border-hover);
   box-shadow: 0 30px 50px -15px #000000, 0 0 30px rgba(255, 215, 0, 0.5), 0 0 0 1px #FFD700 inset;
   transform: translateY(-5px) scale(1.01);
 }
 
-/* ---------- Typography ---------- */
-h1, h2, h3, h4, .section-title {
+/* Typography */
+h1, h2, h3, .section-title {
   font-weight: 600;
   background: var(--gold-gradient);
   -webkit-background-clip: text;
@@ -109,7 +94,6 @@ h1, h2, h3, h4, .section-title {
   text-shadow: 0 0 15px #FFD70080;
 }
 
-/* Quranic verses: bold gold */
 .quran-text, .verse-arabic {
   font-weight: 700;
   color: var(--text-gold);
@@ -118,14 +102,13 @@ h1, h2, h3, h4, .section-title {
   line-height: 2;
 }
 
-/* Kurdish translations: thin off-white */
 .translation-kurdish {
   font-weight: 300;
   color: var(--text-offwhite);
   opacity: 0.9;
 }
 
-/* ---------- Icons (Neon Blue) ---------- */
+/* Icons */
 i, .icon {
   color: var(--neon-blue);
   filter: drop-shadow(0 0 8px var(--neon-blue));
@@ -136,7 +119,7 @@ i:hover {
   filter: drop-shadow(0 0 15px var(--neon-blue));
 }
 
-/* ---------- Buttons (Neumorphic 3D inside glass) ---------- */
+/* Buttons */
 .btn-teal, .btn-gold, .voice-search-btn, .night-mode-toggle, .copy-ayah-btn, .copy-dhikr-btn {
   background: rgba(0, 30, 40, 0.6);
   backdrop-filter: blur(12px);
@@ -153,7 +136,6 @@ i:hover {
   cursor: pointer;
 }
 
-/* Water ripple effect on click (simulated with pseudo) */
 .btn-teal:active::after, .btn-gold:active::after {
   content: "";
   position: absolute;
@@ -172,13 +154,12 @@ i:hover {
   to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
 }
 
-/* Neon blue icons inside buttons */
 .btn-teal i, .btn-gold i, .voice-search-btn i {
   color: var(--neon-blue);
   margin-left: 0.5rem;
 }
 
-/* ---------- Floating Glass Search Bar ---------- */
+/* Search Bar */
 .voice-search {
   background: rgba(0, 10, 20, 0.5);
   backdrop-filter: blur(30px);
@@ -209,14 +190,21 @@ i:hover {
   font-weight: 300;
 }
 
-/* ---------- Floating Bottom Navigation ---------- */
+/* Floating Bottom Navigation */
 .bottom-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   background: rgba(0, 8, 12, 0.6);
   backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 80px;
   padding: 0.6rem 2rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 255, 0.3);
+  display: flex;
+  gap: 1.8rem;
+  z-index: 1000;
 }
 
 .nav-item {
@@ -225,6 +213,7 @@ i:hover {
   align-items: center;
   color: rgba(255, 255, 255, 0.7);
   transition: var(--transition-smooth);
+  cursor: default;
 }
 
 .nav-item i {
@@ -234,7 +223,6 @@ i:hover {
   transition: all 0.2s;
 }
 
-/* Pulse glow on active tab (use .active class) */
 .nav-item.active i {
   animation: pulse-glow 1.5s infinite;
   color: #FFD700;
@@ -247,7 +235,7 @@ i:hover {
   100% { filter: drop-shadow(0 0 10px #FFD700); }
 }
 
-/* ---------- Prayer Times (Large neon timers) ---------- */
+/* Prayer Times */
 .prayer-times-list .prayer-item {
   background: rgba(0, 20, 30, 0.6);
   backdrop-filter: blur(10px);
@@ -260,6 +248,7 @@ i:hover {
   text-shadow: 0 0 15px var(--neon-blue);
   position: relative;
   overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 
 .prayer-times-list .prayer-item::before {
@@ -287,7 +276,7 @@ i:hover {
   backdrop-filter: blur(12px);
 }
 
-/* ---------- Qibla Radar (3D Golden Compass) ---------- */
+/* Qibla Radar */
 .qibla-radar {
   background: rgba(0, 5, 10, 0.7);
   border-radius: 50%;
@@ -304,7 +293,6 @@ i:hover {
   transform-style: preserve-3d;
 }
 
-/* Kaaba image inside (would be set as background, but we use pseudo for demo) */
 .qibla-radar::after {
   content: "";
   position: absolute;
@@ -317,7 +305,6 @@ i:hover {
   transition: filter 0.5s, opacity 0.5s;
 }
 
-/* sharpen when aligned (simulate alignment with .aligned class) */
 .qibla-radar.aligned::after {
   filter: blur(0);
   opacity: 1;
@@ -328,11 +315,11 @@ i:hover {
   font-size: 3rem;
   color: #FFD700;
   filter: drop-shadow(0 0 20px #FFD700);
-  transform: rotate(45deg); /* needle direction */
+  transform: rotate(45deg);
   z-index: 2;
 }
 
-/* ---------- Tasbih 3D Crystal Bead ---------- */
+/* Tasbih 3D Bead */
 .tasbih-counter .bead {
   width: 50px;
   height: 50px;
@@ -354,7 +341,7 @@ i:hover {
   50% { transform: translateY(-8px) rotate(5deg); }
 }
 
-/* ---------- Copy Notification Toast ---------- */
+/* Copy Toast */
 .copy-toast {
   position: fixed;
   bottom: 100px;
@@ -393,7 +380,7 @@ i:hover {
   font-size: 1.2rem;
 }
 
-/* ---------- Skeleton Loading with Shimmer ---------- */
+/* Skeleton Loading */
 .skeleton-card {
   background: rgba(30, 30, 40, 0.3);
   border-radius: 30px;
@@ -418,7 +405,7 @@ i:hover {
   100% { transform: translateX(100%); }
 }
 
-/* ---------- Scientific Miracle Cards (Galaxy Purple) ---------- */
+/* Scientific Miracle Card */
 .miracle-card {
   background: linear-gradient(145deg, #1a0b2e, #0e0a1a);
   border: 1px solid #a855f7;
@@ -434,50 +421,61 @@ i:hover {
   box-shadow: 0 0 70px #c084fc, 0 0 20px #a855f7 inset;
 }
 
-/* ---------- Parallax (mouse move effect) ---------- */
-.parallax-bg {
-  transition: transform 0.2s ease-out;
-  will-change: transform;
+/* Kids Mode */
+body.kids-mode {
+  filter: hue-rotate(90deg) brightness(1.1);
 }
 
-/* ---------- Snap Scroll (mobile) ---------- */
-.snap-container {
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  height: 100vh;
+body.kids-mode .glass-card {
+  border-color: #ff69b4;
+  box-shadow: 0 0 30px #ff69b4;
 }
 
-.snap-section {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  min-height: 100vh;
-  padding: 1rem;
+/* Night Shift */
+body.night-shift {
+  filter: sepia(0.3) brightness(0.9);
 }
 
-/* ---------- Responsive Grid / Flex ---------- */
+/* Battery Saver */
+body.battery-saver * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+.flex-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badge {
+  background: rgba(0, 30, 30, 0.5);
+  border-radius: 30px;
+  padding: 0.4rem 1.2rem;
+  backdrop-filter: blur(5px);
+  border: 1px solid #2dd4bf;
+}
+
+/* Responsive Grid */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.8rem;
 }
 
-/* ---------- Additional Polish ---------- */
-hr {
-  border: 0.5px solid rgba(255, 215, 0, 0.2);
-  margin: 2rem 0;
-}
-
-/* width */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
-/* Track */
 ::-webkit-scrollbar-track {
   background: #001220;
 }
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #FFD700;
   border-radius: 10px;
